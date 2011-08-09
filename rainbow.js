@@ -1,7 +1,7 @@
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
 
-var cnv = $('rainbow');
+var cnv = $('ecstatic-singing-rainbow');
 var ctx = cnv.getContext("2d");
 
 var Control = {

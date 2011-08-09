@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Happy birthday, Heidi!</title>
+    <title>Ecstatic Singing Rainbow</title>
     <style>
       body { background-color: #ffffff; margin: 0; }
       canvas { height: 100%; position: fixed; top: 0; width: 100%; }
     </style>
   </head>
   <body>
-    <audio loop="loop" id="birthday-song">
-      <source src="heidi-birthday.ogg" type="audio/ogg" />
-    </audio>
-    <canvas id="rainbow"></canvas>
+    <canvas id="ecstatic-singing-rainbow"></canvas>
     <script src="mootools.js"></script>
     <script src="rainbow.js"></script>
     <script>
-      var musicable = false;
-      var drawable = true, drawing = false;
+      var drawing = true;
       window.addEvent('domready', function () {
         Control.resize();
         EcstaticSingingRainbow.draw();
         setInterval(function () {
-          if (drawable && drawing) {
+          if (drawing) {
             EcstaticSingingRainbow.update();
             EcstaticSingingRainbow.draw();
           }
@@ -30,28 +26,6 @@
       window.addEvent('resize', function () {
         Control.resize();
         EcstaticSingingRainbow.draw();
-      });
-      window.addEvent('mousemove', function () {
-        if (drawable) drawing = true;
-        if (musicable) {
-          musicable = false;
-          setTimeout(function () {$('birthday-song').play()}, 500);
-        }
-      });
-      window.addEvent('click', function () {
-        $('birthday-song').pause();
-        $('birthday-song').currentTime = 0;
-        musicable = false;
-      });
-      window.addEvent('dblclick', function () {
-        drawing = false;
-        drawable = false;
-      });
-      window.addEvent('keypress', function (event) {
-        if (event.key === 'p') {
-          musicable = true;
-          drawable = true;
-        }
       });
     </script>
   </body>
