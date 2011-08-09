@@ -8,8 +8,51 @@
     </style>
   </head>
   <body>
+    <audio loop="loop" id="birthday-song">
+      <source src="heidi-birthday.ogg" type="audio/ogg" />
+    </audio>
     <canvas id="rainbow"></canvas>
     <script src="mootools.js"></script>
     <script src="rainbow.js"></script>
+    <script>
+      var musicable = false;
+      var drawable = true, drawing = false;
+      window.addEvent('domready', function () {
+        Control.resize();
+        EcstaticSingingRainbow.draw();
+        setInterval(function () {
+          if (drawable && drawing) {
+            EcstaticSingingRainbow.update();
+            EcstaticSingingRainbow.draw();
+          }
+        }, 50);
+      });
+      window.addEvent('resize', function () {
+        Control.resize();
+        EcstaticSingingRainbow.draw();
+      });
+      window.addEvent('mousemove', function () {
+        if (drawable) drawing = true;
+        if (musicable) {
+          musicable = false;
+          setTimeout(function () {$('birthday-song').play()}, 500);
+        }
+      });
+      window.addEvent('click', function () {
+        $('birthday-song').pause();
+        $('birthday-song').currentTime = 0;
+        musicable = false;
+      });
+      window.addEvent('dblclick', function () {
+        drawing = false;
+        drawable = false;
+      });
+      window.addEvent('keypress', function (event) {
+        if (event.key === 'p') {
+          musicable = true;
+          drawable = true;
+        }
+      });
+    </script>
   </body>
 </html>
