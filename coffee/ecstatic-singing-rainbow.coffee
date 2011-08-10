@@ -6,8 +6,8 @@ context = canvas.getContext '2d'
 
 Control =
   resize: ->
-    canvas.width = WIDTH = window.innerWidth
-    canvas.height = HEIGHT = window.innerHeight
+    canvas.width = WIDTH = canvas.getStyle('width').toInt()
+    canvas.height = HEIGHT = canvas.getStyle('height').toInt()
 
 cx = cw = (x) -> x * WIDTH / 1000
 cy = ch = (y) -> y * HEIGHT / 1000
