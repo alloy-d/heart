@@ -4,40 +4,42 @@ HEIGHT = window.innerHeight   # Example optimal:  738 or 1.00
 canvas = $ 'ecstatic-singing-rainbow'
 context = canvas.getContext '2d'
 
-Control =
-  resize: ->
-    canvas.width = WIDTH = canvas.getStyle('width').toInt()
-    canvas.height = HEIGHT = canvas.getStyle('height').toInt()
-
-cx = cw = (x) -> x * WIDTH / 1000
-cy = ch = (y) -> y * HEIGHT / 1000
+pt = (x, y) -> {x: x, y: y}
 rect = (r, theta, cx = 0, cy = 0) -> {
   x: Math.cos(theta) * r + cx
   y: Math.sin(theta) * r + cy
 }
-xy = (x, y) -> {x: x, y: y}
-cxy = (x, y) -> xy(cx(x), cy(y))
+
+S = Sizer =
+  w: (w) -> w * WIDTH / 1000
+  h: (h) -> h * HEIGHT / 1000
+  x: (x) -> this.w(x)
+  y: (y) -> this.h(y)
+  pt: (x, y) -> pt this.x(x), this.y(y)
+  resize: ->
+    canvas.width = WIDTH = canvas.getStyle('width').toInt()
+    canvas.height = HEIGHT = canvas.getStyle('height').toInt()
 
 EcstaticSingingRainbow = (->
   letters = ['r', 'o', 'y', 'g', 'b', 'i', 'v', 'w']
   letterToIndex = (letter) -> letters.indexOf(letter)
 
   BaseValues =
-    start: xy(1000, 120)
-    end: xy(80, 1000)
-    focus: xy(300, 200)
+    start: pt(1000, 120)
+    end: pt(80, 1000)
+    focus: pt(300, 200)
 
   Increments =
-    start: xy(0, 80)
-    end: xy(65, 0)
-    focus: xy(50, 60)
+    start: pt(0, 80)
+    end: pt(65, 0)
+    focus: pt(50, 60)
 
   Calc = (->
     calc = (prop) ->
       (letter) ->
         step = letterToIndex letter
         value = (dim) -> BaseValues[prop][dim] + Increments[prop][dim] * step
-        cxy(value('x'), value('y'))
+        S.pt(value('x'), value('y'))
     {
       Start: calc 'start'
       End: calc 'end'
@@ -65,7 +67,7 @@ EcstaticSingingRainbow = (->
       context.fillStyle = Colors[letter]
       context.moveTo start.x, start.y
       context.quadraticCurveTo focus.x, focus.y, end.x, end.y
-      context.lineTo cx(1000), cy(1000)
+      context.lineTo S.x(1000), S.y(1000)
       context.lineTo start.x, start.y
       context.fill()
       context.closePath()
@@ -74,9 +76,9 @@ EcstaticSingingRainbow = (->
     drawColor letter for letter in letters
 
   drawFace = (x, y, theta) ->
-    lineTo = (x, y) -> context.lineTo(cx(x), cy(y))
-    moveTo = (x, y) -> context.moveTo(cx(x), cy(y))
-    start = cxy x, y
+    lineTo = (x, y) -> context.lineTo(S.x(x), S.y(y))
+    moveTo = (x, y) -> context.moveTo(S.x(x), S.y(y))
+    start = S.pt x, y
     context.save()
     context.rotate theta
     context.translate start.x, 0
@@ -97,16 +99,16 @@ EcstaticSingingRainbow = (->
     lineTo 110, 300
     lineTo 60, 140
 
-    context.lineWidth = cx 19
+    context.lineWidth = S.x 19
     context.strokeStyle = 'black'
     context.stroke()
-    context.lineWidth = cx 16
+    context.lineWidth = S.x 16
     context.strokeStyle = 'white'
     context.stroke()
     context.closePath()
     context.restore()
 
-  faceLoc = xy 570, 380
+  faceLoc = pt 570, 380
   faceDir = 1
 
   moveFace = ->
@@ -117,15 +119,15 @@ EcstaticSingingRainbow = (->
     faceLoc.x += faceDir * 5
 
   drawNote = (note) ->
-    location = cxy note.x, note.y
+    location = S.pt note.x, note.y
     context.save()
     context.beginPath()
     context.translate location.x, location.y
     context.rotate note.theta
-    context.arc 0, 0, cw(note.size), 0, 2*Math.PI, true
-    context.lineTo cx(0), cy(-note.size * 9)
-    context.lineTo cx(-note.size/2), cy(-note.size * 9)
-    context.lineTo cx(note.size/2), cy(0)
+    context.arc 0, 0, S.w(note.size), 0, 2*Math.PI, true
+    context.lineTo S.x(0), S.y(-note.size * 9)
+    context.lineTo S.x(-note.size/2), S.y(-note.size * 9)
+    context.lineTo S.x(note.size/2), S.y(0)
 
     context.fillStyle = 'black'
     context.stroke()
@@ -161,12 +163,12 @@ EcstaticSingingRainbow = (->
 )()
 
 window.addEvent 'domready', ->
-  Control.resize()
+  Sizer.resize()
   EcstaticSingingRainbow.draw()
   setInterval ->
     EcstaticSingingRainbow.update()
     EcstaticSingingRainbow.draw()
   , 50
 window.addEvent 'resize', ->
-  Control.resize()
+  Sizer.resize()
   EcstaticSingingRainbow.draw()
