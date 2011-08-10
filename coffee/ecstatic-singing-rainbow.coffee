@@ -1,8 +1,8 @@
-WIDTH = window.innerWidth
-HEIGHT = window.innerHeight
+WIDTH = window.innerWidth     # Example optimal: 1151 or 1.55
+HEIGHT = window.innerHeight   # Example optimal:  738 or 1.00
 
 canvas = $ 'ecstatic-singing-rainbow'
-context = canvas.getContext "2d"
+context = canvas.getContext '2d'
 
 Control =
   resize: ->
