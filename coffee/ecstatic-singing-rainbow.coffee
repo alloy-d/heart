@@ -136,14 +136,16 @@ EcstaticSingingRainbow = (->
 
   drawNote = (note) ->
     location = S.pt note.x, note.y
+    x = S.w   # x should be relative to location
+    y = S.h   # y should be relative to location
     context.save()
     context.beginPath()
     context.translate location.x, location.y
     context.rotate note.theta
-    context.arc 0, 0, S.w(note.size), 0, 2*Math.PI, true
-    context.lineTo S.x(0), S.y(-note.size * 9)
-    context.lineTo S.x(-note.size/2), S.y(-note.size * 9)
-    context.lineTo S.x(note.size/2), S.y(0)
+    context.arc 0, 0, x(note.size), 0, 2*Math.PI, true
+    context.lineTo 0, y(-note.size * 9)
+    context.lineTo x(-note.size/2), y(-note.size * 9)
+    context.lineTo x(note.size/2), 0
 
     context.fillStyle = 'black'
     context.stroke()
