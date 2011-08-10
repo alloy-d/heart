@@ -5,10 +5,6 @@ canvas = $ 'ecstatic-singing-rainbow'
 context = canvas.getContext '2d'
 
 pt = (x, y) -> {x: x, y: y}
-rect = (r, theta, cx = 0, cy = 0) -> {
-  x: Math.cos(theta) * r + cx
-  y: Math.sin(theta) * r + cy
-}
 
 S = Sizer =
   w: (w) -> w * WIDTH / 1000
