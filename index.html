@@ -9,24 +9,7 @@
   </head>
   <body>
     <canvas id="ecstatic-singing-rainbow"></canvas>
-    <script src="mootools.js"></script>
-    <script src="rainbow.js"></script>
-    <script>
-      var drawing = true;
-      window.addEvent('domready', function () {
-        Control.resize();
-        EcstaticSingingRainbow.draw();
-        setInterval(function () {
-          if (drawing) {
-            EcstaticSingingRainbow.update();
-            EcstaticSingingRainbow.draw();
-          }
-        }, 50);
-      });
-      window.addEvent('resize', function () {
-        Control.resize();
-        EcstaticSingingRainbow.draw();
-      });
-    </script>
+    <script src="js/mootools.js"></script>
+    <script src="js/ecstatic-singing-rainbow.js"></script>
   </body>
 </html>

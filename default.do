@@ -1,2 +1,2 @@
-redo-ifchange ecstatic-singing-rainbow.js
+redo-ifchange js/ecstatic-singing-rainbow.js
 
