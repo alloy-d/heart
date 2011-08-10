@@ -36,59 +36,64 @@ S = Sizer =
     @y = (y) -> @h(y) + offset.y
 
 EcstaticSingingRainbow = (->
-  letters = ['r', 'o', 'y', 'g', 'b', 'i', 'v', 'w']
-  letterToIndex = (letter) -> letters.indexOf(letter)
+  Rainbow = (->
+    letters = ['r', 'o', 'y', 'g', 'b', 'i', 'v', 'w']
+    letterToIndex = (letter) -> letters.indexOf(letter)
 
-  BaseValues =
-    start: pt(1000, 120)
-    end: pt(80, 1000)
-    focus: pt(300, 200)
+    BaseValues =
+      start: pt(1000, 120)
+      end: pt(80, 1000)
+      focus: pt(300, 200)
 
-  Increments =
-    start: pt(0, 80)
-    end: pt(65, 0)
-    focus: pt(50, 60)
+    Increments =
+      start: pt(0, 80)
+      end: pt(65, 0)
+      focus: pt(50, 60)
 
-  Calc = (->
-    calc = (prop) ->
-      (letter) ->
-        step = letterToIndex letter
-        value = (dim) -> BaseValues[prop][dim] + Increments[prop][dim] * step
-        S.pt(value('x'), value('y'))
+    Calc = (->
+      calc = (prop) ->
+        (letter) ->
+          step = letterToIndex letter
+          value = (dim) ->
+            BaseValues[prop][dim] + Increments[prop][dim] * step
+          S.pt(value('x'), value('y'))
+      {
+        Start: calc 'start'
+        End: calc 'end'
+        Focus: calc 'focus'
+      }
+    )()
+
+    Colors =
+      r: 'red'
+      o: 'orange'
+      y: 'yellow'
+      g: 'green'
+      b: 'blue'
+      i: 'indigo'
+      v: 'violet'
+      w: 'white'
+
     {
-      Start: calc 'start'
-      End: calc 'end'
-      Focus: calc 'focus'
+      draw: ->
+        drawColor = (letter) ->
+          start = Calc.Start letter
+          focus = Calc.Focus letter
+          end = Calc.End letter
+
+          context.beginPath()
+          context.fillStyle = Colors[letter]
+          context.moveTo start.x, start.y
+          context.quadraticCurveTo focus.x, focus.y, end.x, end.y
+          context.lineTo S.x(1000), S.y(1000)
+          context.lineTo start.x, start.y
+          context.fill()
+          context.closePath()
+
+        context.save()
+        drawColor letter for letter in letters
     }
   )()
-
-  Colors =
-    r: 'red'
-    o: 'orange'
-    y: 'yellow'
-    g: 'green'
-    b: 'blue'
-    i: 'indigo'
-    v: 'violet'
-    w: 'white'
-
-  drawRainbow = ->
-    drawColor = (letter) ->
-      start = Calc.Start letter
-      focus = Calc.Focus letter
-      end = Calc.End letter
-
-      context.beginPath()
-      context.fillStyle = Colors[letter]
-      context.moveTo start.x, start.y
-      context.quadraticCurveTo focus.x, focus.y, end.x, end.y
-      context.lineTo S.x(1000), S.y(1000)
-      context.lineTo start.x, start.y
-      context.fill()
-      context.closePath()
-
-    context.save()
-    drawColor letter for letter in letters
 
   Face =
     x: 570
@@ -179,7 +184,7 @@ EcstaticSingingRainbow = (->
       note.move() for note in notes
     draw: ->
       context.clearRect(0, 0, WIDTH, HEIGHT)
-      drawRainbow()
+      Rainbow.draw()
       Face.draw()
       note.draw() for note in notes
   }
