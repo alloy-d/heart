@@ -134,49 +134,53 @@ EcstaticSingingRainbow = (->
       faceDir = 1
     faceLoc.x += faceDir * 5
 
-  drawNote = (note) ->
-    location = S.pt note.x, note.y
-    x = S.w   # x should be relative to location
-    y = S.h   # y should be relative to location
-    context.save()
-    context.beginPath()
-    context.translate location.x, location.y
-    context.rotate note.theta
-    context.arc 0, 0, x(note.size), 0, 2*Math.PI, true
-    context.lineTo 0, y(-note.size * 9)
-    context.lineTo x(-note.size/2), y(-note.size * 9)
-    context.lineTo x(note.size/2), 0
+  class Note
+    constructor: (@x, @y, @theta, @size, @dir) ->
 
-    context.fillStyle = 'black'
-    context.stroke()
-    context.fill()
-    context.closePath()
-    context.restore()
+    draw: ->
+      location = S.pt @x, @y
+      x = S.w   # x should be relative to location
+      y = S.h   # y should be relative to location
+      context.save()
+      context.beginPath()
+      context.translate location.x, location.y
+      context.rotate @theta
+      context.arc 0, 0, x(@size), 0, 2*Math.PI, true
+      context.lineTo 0, y(-@size * 9)
+      context.lineTo x(-@size/2), y(-@size * 9)
+      context.lineTo x(@size/2), 0
+
+      context.fillStyle = 'black'
+      context.stroke()
+      context.fill()
+      context.closePath()
+      context.restore()
+
+    move: ->
+      if @theta < -0.3 and @dir is -1
+        @dir = 1
+      else if @theta > 0.3 and @dir is 1
+        @dir = -1
+      @theta += @dir / 20
 
   notes = [
-    {x: 280, y: 220, theta: 0, size: 12, dir: 1},
-    {x: 430, y: 200, theta: -0.2, size: 8, dir: -1},
-    {x: 90,  y: 190, theta: 0.1, size: 6, dir: 1},
-    {x: 180, y: 460, theta: 0.2, size: 10, dir: -1},
-    {x: 80,  y: 700, theta: 0, size: 5, dir: 1},
+    #          x,   y, theta, sz, dir
+    new Note 280, 220,     0, 12,   1
+    new Note 430, 200,  -0.2,  8,  -1
+    new Note  90, 190,   0.1,  6,   1
+    new Note 180, 460,   0.2, 10,  -1
+    new Note  80, 700,     0,  5,   1
   ]
-
-  moveNote = (note) ->
-    if note.theta < -0.3 and note.dir is -1
-      note.dir = 1
-    else if note.theta > 0.3 and note.dir is 1
-      note.dir = -1
-    note.theta += note.dir / 20
 
   {
     update: ->
       moveFace()
-      moveNote note for note in notes
+      note.move() for note in notes
     draw: ->
       context.clearRect(0, 0, WIDTH, HEIGHT)
       drawRainbow()
       drawFace faceLoc.x, faceLoc.y, 0.5
-      drawNote note for note in notes
+      note.draw() for note in notes
   }
 )()
 
