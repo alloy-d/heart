@@ -90,49 +90,50 @@ EcstaticSingingRainbow = (->
     context.save()
     drawColor letter for letter in letters
 
-  drawFace = (x, y, theta) ->
-    lineTo = (x, y) -> context.lineTo(S.x(x), S.y(y))
-    moveTo = (x, y) -> context.moveTo(S.x(x), S.y(y))
-    start = S.pt x, y
-    context.save()
-    context.translate S.x(0), S.y(0)
-    context.rotate theta
-    context.translate start.x, S.y 0
-    context.beginPath()
-    context.lineCap = "round"
-    context.lineJoin = "round"
+  Face =
+    x: 570
+    y: 380
+    dir: 1
+    draw: ->
+      lineTo = (x, y) -> context.lineTo(S.x(x), S.y(y))
+      moveTo = (x, y) -> context.moveTo(S.x(x), S.y(y))
+      start = S.pt @x, @y
+      context.save()
+      context.translate S.x(0), S.y(0)
+      context.rotate 0.5
+      context.translate start.x, S.y 0
+      context.beginPath()
+      context.lineCap = "round"
+      context.lineJoin = "round"
 
-    moveTo 0, 0
-    lineTo 70, 50
-    lineTo 0, 100
+      moveTo 0, 0
+      lineTo 70, 50
+      lineTo 0, 100
 
-    moveTo 220, 0
-    lineTo 150, 50
-    lineTo 220, 100
+      moveTo 220, 0
+      lineTo 150, 50
+      lineTo 220, 100
 
-    moveTo 60, 140
-    lineTo 160, 140
-    lineTo 110, 300
-    lineTo 60, 140
+      moveTo 60, 140
+      lineTo 160, 140
+      lineTo 110, 300
+      lineTo 60, 140
 
-    context.lineWidth = S.w 19
-    context.strokeStyle = 'black'
-    context.stroke()
-    context.lineWidth = S.w 16
-    context.strokeStyle = 'white'
-    context.stroke()
-    context.closePath()
-    context.restore()
+      context.lineWidth = S.w 19
+      context.strokeStyle = 'black'
+      context.stroke()
+      context.lineWidth = S.w 16
+      context.strokeStyle = 'white'
+      context.stroke()
+      context.closePath()
+      context.restore()
 
-  faceLoc = pt 570, 380
-  faceDir = 1
-
-  moveFace = ->
-    if faceLoc.x > 600 and faceDir is 1
-      faceDir = -1
-    else if faceLoc.x < 520 and faceDir is -1
-      faceDir = 1
-    faceLoc.x += faceDir * 5
+    move: ->
+      if @x > 600 and @dir is 1
+        @dir = -1
+      else if @x < 520 and @dir is -1
+        @dir = 1
+      @x += @dir * 5
 
   class Note
     constructor: (@x, @y, @theta, @size, @dir) ->
@@ -174,12 +175,12 @@ EcstaticSingingRainbow = (->
 
   {
     update: ->
-      moveFace()
+      Face.move()
       note.move() for note in notes
     draw: ->
       context.clearRect(0, 0, WIDTH, HEIGHT)
       drawRainbow()
-      drawFace faceLoc.x, faceLoc.y, 0.5
+      Face.draw()
       note.draw() for note in notes
   }
 )()
