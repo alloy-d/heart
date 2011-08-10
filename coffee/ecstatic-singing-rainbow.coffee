@@ -100,13 +100,13 @@ EcstaticSingingRainbow = (->
     y: 380
     dir: 1
     draw: ->
-      lineTo = (x, y) -> context.lineTo(S.x(x), S.y(y))
-      moveTo = (x, y) -> context.moveTo(S.x(x), S.y(y))
-      start = S.pt @x, @y
+      lineTo = (x, y) -> context.lineTo(S.w(x), S.h(y))
+      moveTo = (x, y) -> context.moveTo(S.w(x), S.h(y))
+      start = pt S.w(@x), S.h(@y)
       context.save()
       context.translate S.x(0), S.y(0)
       context.rotate 0.5
-      context.translate start.x, S.y 0
+      context.translate start.x, S.h 0
       context.beginPath()
       context.lineCap = "round"
       context.lineJoin = "round"
