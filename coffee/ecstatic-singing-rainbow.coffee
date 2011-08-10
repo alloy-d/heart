@@ -20,6 +20,21 @@ S = Sizer =
     canvas.width = WIDTH = canvas.getStyle('width').toInt()
     canvas.height = HEIGHT = canvas.getStyle('height').toInt()
 
+    size = pt WIDTH, HEIGHT
+    offset = pt 0, 0
+    ratio = (WIDTH / HEIGHT).round(2)
+    if ratio > 1.55
+      size.x = HEIGHT * 1.55
+      offset.x = (WIDTH - size.x)
+    else if ratio < 1.55
+      size.y = WIDTH / 1.55
+      offset.y = (HEIGHT - size.y)
+
+    this.w = (w) -> w * size.x / 1000
+    this.h = (h) -> h * size.y / 1000
+    this.x = (x) -> this.w(x) + offset.x
+    this.y = (y) -> this.h(y) + offset.y
+
 EcstaticSingingRainbow = (->
   letters = ['r', 'o', 'y', 'g', 'b', 'i', 'v', 'w']
   letterToIndex = (letter) -> letters.indexOf(letter)
@@ -80,13 +95,14 @@ EcstaticSingingRainbow = (->
     moveTo = (x, y) -> context.moveTo(S.x(x), S.y(y))
     start = S.pt x, y
     context.save()
+    context.translate S.x(0), S.y(0)
     context.rotate theta
-    context.translate start.x, 0
+    context.translate start.x, S.y 0
     context.beginPath()
-    context.moveTo 0, 0
     context.lineCap = "round"
     context.lineJoin = "round"
 
+    moveTo 0, 0
     lineTo 70, 50
     lineTo 0, 100
 
@@ -99,10 +115,10 @@ EcstaticSingingRainbow = (->
     lineTo 110, 300
     lineTo 60, 140
 
-    context.lineWidth = S.x 19
+    context.lineWidth = S.w 19
     context.strokeStyle = 'black'
     context.stroke()
-    context.lineWidth = S.x 16
+    context.lineWidth = S.w 16
     context.strokeStyle = 'white'
     context.stroke()
     context.closePath()
