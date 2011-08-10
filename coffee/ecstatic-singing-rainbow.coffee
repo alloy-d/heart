@@ -13,9 +13,9 @@ rect = (r, theta, cx = 0, cy = 0) -> {
 S = Sizer =
   w: (w) -> w * WIDTH / 1000
   h: (h) -> h * HEIGHT / 1000
-  x: (x) -> this.w(x)
-  y: (y) -> this.h(y)
-  pt: (x, y) -> pt this.x(x), this.y(y)
+  x: (x) -> @w(x)
+  y: (y) -> @h(y)
+  pt: (x, y) -> pt @x(x), @y(y)
   resize: ->
     canvas.width = WIDTH = canvas.getStyle('width').toInt()
     canvas.height = HEIGHT = canvas.getStyle('height').toInt()
@@ -30,10 +30,10 @@ S = Sizer =
       size.y = WIDTH / 1.55
       offset.y = (HEIGHT - size.y)
 
-    this.w = (w) -> w * size.x / 1000
-    this.h = (h) -> h * size.y / 1000
-    this.x = (x) -> this.w(x) + offset.x
-    this.y = (y) -> this.h(y) + offset.y
+    @w = (w) -> w * size.x / 1000
+    @h = (h) -> h * size.y / 1000
+    @x = (x) -> @w(x) + offset.x
+    @y = (y) -> @h(y) + offset.y
 
 EcstaticSingingRainbow = (->
   letters = ['r', 'o', 'y', 'g', 'b', 'i', 'v', 'w']
