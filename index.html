@@ -4,21 +4,31 @@
     <title>^_^ I love you!</title>
     <style>
       body { background-color: #ffffff; }
-      canvas {
-      display: block;
-      height: 500px;
-      left: 50%;
-      margin: 0 auto;
-      margin-top: -265px;
-      margin-left: -250px;
-      position: absolute;
-      top: 50%;
-      width: 500px;
+      canvas { display: block; }
+      #heart {
+        height: 500px;
+        left: 50%;
+        margin: 0 auto;
+        margin-top: -265px;
+        margin-left: -250px;
+        position: absolute;
+        top: 50%;
+        width: 500px;
+      }
+      #ecstatic-singing-rainbow {
+        bottom: 0;
+        height: 33%;
+        position: absolute;
+        right: 0;
+        width: 40%;
       }
     </style>
   </head>
   <body>
     <canvas id="heart"></canvas>
+    <canvas id="ecstatic-singing-rainbow"></canvas>
     <script src="heart.js"></script>
+    <script src="js/mootools.js"></script>
+    <script src="js/ecstatic-singing-rainbow.js"></script>
   </body>
 </html>
